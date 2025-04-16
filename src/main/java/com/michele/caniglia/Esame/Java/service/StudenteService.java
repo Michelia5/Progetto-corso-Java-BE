@@ -6,8 +6,10 @@ import com.michele.caniglia.Esame.Java.repository.StudenteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.michele.caniglia.Esame.Java.dto.StudenteMapper.*;
 
 @Service
 @RequiredArgsConstructor
@@ -21,17 +23,24 @@ public class StudenteService {
     }
 
     public List<StudenteDTO> getAll() {
-        return repository.findAll().stream()
-                .map(this::toDTO)
-                .collect(Collectors.toList());
+        List<Studente> studenti = repository.findAll();
+        List<StudenteDTO> lista = new ArrayList<>();
+
+        for (Studente s : studenti) {
+            lista.add(toDTO(s));
+        }
+
+        return lista;
     }
 
     public StudenteDTO getById(Long id) {
-        return repository.findById(id).map(this::toDTO).orElse(null);
+        Studente studente = repository.findById(id).orElse(null);
+        return toDTO(studente);
     }
 
     public StudenteDTO aggiornaStudente(Long id, StudenteDTO dto) {
         if (!repository.existsById(id)) return null;
+
         Studente daAggiornare = fromDTO(dto);
         daAggiornare.setId(id);
         return toDTO(repository.save(daAggiornare));
@@ -39,25 +48,5 @@ public class StudenteService {
 
     public void eliminaStudente(Long id) {
         repository.deleteById(id);
-    }
-
-    private StudenteDTO toDTO(Studente studente) {
-        StudenteDTO dto = new StudenteDTO();
-        dto.setId(studente.getId());
-        dto.setNome(studente.getNome());
-        dto.setCognome(studente.getCognome());
-        dto.setEmail(studente.getEmail());
-        dto.setDataNascita(studente.getDataNascita());
-        return dto;
-    }
-
-    private Studente fromDTO(StudenteDTO dto) {
-        return Studente.builder()
-                .id(dto.getId())
-                .nome(dto.getNome())
-                .cognome(dto.getCognome())
-                .email(dto.getEmail())
-                .dataNascita(dto.getDataNascita())
-                .build();
     }
 }

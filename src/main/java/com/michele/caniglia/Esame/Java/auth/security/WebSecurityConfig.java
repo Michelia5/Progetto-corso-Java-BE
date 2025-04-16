@@ -50,13 +50,11 @@ public class WebSecurityConfig {
 
 
     /*
-    
     - Disabilitare il CSRF
     - Imposta la gestione delle sessioni su stateless (usa solo il token JWT)
     - Rende pubblici gli endpoint sotto /api/auth/**
     - Protegge il resto
     - Collego il filtro JWT e l’autenticazione personalizzata
-    
     */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

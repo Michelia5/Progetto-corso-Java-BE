@@ -42,6 +42,7 @@ public class AuthController {
     @Autowired
     private JwtUtils jwtUtils;
 
+    // Gestisco il login
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -64,6 +65,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", userDetails.getUsername(), ruoli));
     }
 
+    // Gestisco la registrazione
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
 
@@ -76,6 +78,7 @@ public class AuthController {
         // Crea nuovo utente
         AuthUtente utente = AuthUtente.builder()
                 .username(signupRequest.getUsername())
+                .email(signupRequest.getEmail())
                 .password(encoder.encode(signupRequest.getPassword()))
                 .build();
 

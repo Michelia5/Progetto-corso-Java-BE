@@ -2,6 +2,8 @@ package com.michele.caniglia.Esame.Java.auth.security.jwt;
 
 import com.michele.caniglia.Esame.Java.auth.security.services.UserDetailsImpl;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +37,7 @@ public class JwtUtils {
                 .setSubject(userPrincipal.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .signWith(Keys.hmacShaKeyFor(jwtSecret.getBytes()), SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -43,19 +45,24 @@ public class JwtUtils {
      * Estrae lo username dal token JWT.
      */
     public String getUsernameFromJwtToken(String token) {
-        return Jwts.parser()
-                .setSigningKey(jwtSecret)
+        return Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                .build()
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
     }
+    
 
     /**
      * Valida il token JWT.
      */
     public boolean validateJwtToken(String authToken) {
         try {
-            Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
+            Jwts.parserBuilder()
+                .setSigningKey(Keys.hmacShaKeyFor(jwtSecret.getBytes()))
+                .build()
+                .parseClaimsJws(authToken);
             return true;
         } catch (SignatureException e) {
             logger.error("Firma JWT non valida: {}", e.getMessage());
@@ -68,7 +75,8 @@ public class JwtUtils {
         } catch (IllegalArgumentException e) {
             logger.error("Token JWT vuoto: {}", e.getMessage());
         }
-
+    
         return false;
     }
+    
 }

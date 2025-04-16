@@ -1,5 +1,7 @@
 package com.michele.caniglia.Esame.Java.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,5 +27,5 @@ public class Studente {
     private String nome;
     private String cognome;
     private String email;
-    private String dataNascita;
+    private LocalDate dataNascita;
 }

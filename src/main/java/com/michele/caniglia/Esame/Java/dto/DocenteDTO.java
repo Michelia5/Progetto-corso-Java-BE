@@ -1,22 +1,22 @@
 package com.michele.caniglia.Esame.Java.dto;
 
-import java.time.LocalDate;
-
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class StudenteDTO {
+public class DocenteDTO {
+
     private Long id;
+
     @NotBlank
     private String nome;
-    
+
     @NotBlank
     private String cognome;
-    
+
+    @NotBlank
     @Email
     private String email;
-    
-    @NotNull 
-    private LocalDate dataNascita;
 }
+

@@ -2,6 +2,8 @@ package com.michele.caniglia.Esame.Java.controller;
 
 import com.michele.caniglia.Esame.Java.dto.StudenteDTO;
 import com.michele.caniglia.Esame.Java.service.StudenteService;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +18,7 @@ public class StudenteController {
     private final StudenteService studenteService;
 
     @PostMapping
-    public ResponseEntity<StudenteDTO> creaStudente(@RequestBody StudenteDTO dto) {
+    public ResponseEntity<StudenteDTO> creaStudente(@Valid @RequestBody StudenteDTO dto) {
         return ResponseEntity.ok(studenteService.creaStudente(dto));
     }
 
@@ -31,7 +33,7 @@ public class StudenteController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<StudenteDTO> aggiorna(@PathVariable Long id, @RequestBody StudenteDTO dto) {
+    public ResponseEntity<StudenteDTO> aggiorna(@PathVariable Long id, @Valid @RequestBody StudenteDTO dto) {
         return ResponseEntity.ok(studenteService.aggiornaStudente(id, dto));
     }
 
