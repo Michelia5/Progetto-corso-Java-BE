@@ -1,5 +1,6 @@
-package com.michele.caniglia.Esame.Java.dto;
+package com.michele.caniglia.Esame.Java.dto.mapper;
 
+import com.michele.caniglia.Esame.Java.dto.StudenteDTO;
 import com.michele.caniglia.Esame.Java.model.Studente;
 
 public class StudenteMapper {
