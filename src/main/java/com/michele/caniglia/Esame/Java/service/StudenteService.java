@@ -11,6 +11,11 @@ import static com.michele.caniglia.Esame.Java.dto.mapper.StudenteMapper.*;
 import java.util.ArrayList;
 import java.util.List;
 
+
+// Questo Service implementa il Service Layer Pattern.
+// Contiene la logica di business per l'entità Studente, separando il controller dal repository.
+
+
 @Service
 @RequiredArgsConstructor
 public class StudenteService {

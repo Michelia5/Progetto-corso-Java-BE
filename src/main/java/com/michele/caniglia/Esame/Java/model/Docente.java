@@ -3,6 +3,8 @@ package com.michele.caniglia.Esame.Java.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "docenti")
 @Data
@@ -18,4 +20,11 @@ public class Docente {
     private String nome;
     private String cognome;
     private String email;
+
+    @OneToMany(mappedBy = "docente")
+    private List<Corso> corsi;
+
+    @OneToOne
+    @JoinColumn(name = "auth_utente_id")
+    private com.michele.caniglia.Esame.Java.auth.model.AuthUtente authUtente;
 }

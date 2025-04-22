@@ -3,6 +3,8 @@ package com.michele.caniglia.Esame.Java.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "percorsi_formativi")
 @Data
@@ -17,4 +19,7 @@ public class PercorsoFormativo {
 
     private String nome;
     private String descrizione;
+
+    @OneToMany(mappedBy = "percorsoFormativo")
+    private List<Corso> corsi;
 }

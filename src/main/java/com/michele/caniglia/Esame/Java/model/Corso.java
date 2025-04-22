@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "corsi")
@@ -34,5 +36,12 @@ public class Corso {
     @JoinColumn(name = "percorso_formativo_id")
     private PercorsoFormativo percorsoFormativo;
 
-    // @OneToMany(mappedBy = "corso") -> da aggiungere quando creiamo MaterialeDidattico
+    @OneToMany(mappedBy = "corso", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MaterialeDidattico> materialiDidattici = new ArrayList<>();
+
+    @OneToMany(mappedBy = "corso")
+    private List<Iscrizione> iscrizioni;
+
+    @OneToMany(mappedBy = "corso")
+    private List<Esame> esami;
 }

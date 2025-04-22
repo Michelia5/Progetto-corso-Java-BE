@@ -1,16 +1,16 @@
 package com.michele.caniglia.Esame.Java.model;
 
-import java.time.LocalDate;
+import com.michele.caniglia.Esame.Java.auth.model.AuthUtente;
+import jakarta.persistence.*;
+import lombok.*;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+import java.util.List;
+
+
+// Il pattern Builder è utilizzato per creare oggetti Studente in modo leggibile e flessibile.
+// È abilitato da Lombok con l'annotazione @Builder.
+
 
 @Entity
 @Table(name = "studenti")
@@ -28,4 +28,11 @@ public class Studente {
     private String cognome;
     private String email;
     private LocalDate dataNascita;
+
+    @OneToMany(mappedBy = "studente")
+    private List<Iscrizione> iscrizioni;
+
+    @OneToOne
+    @JoinColumn(name = "auth_utente_id")
+    private AuthUtente authUtente;
 }

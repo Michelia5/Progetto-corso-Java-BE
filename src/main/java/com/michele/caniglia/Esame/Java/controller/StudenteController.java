@@ -1,14 +1,23 @@
 package com.michele.caniglia.Esame.Java.controller;
 
 import com.michele.caniglia.Esame.Java.dto.StudenteDTO;
+import com.michele.caniglia.Esame.Java.model.Studente;
 import com.michele.caniglia.Esame.Java.service.StudenteService;
 
+import java.io.IOException;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.PrintWriter;
 import java.util.List;
+
+
+// Questo controller implementa il pattern Controller del modello MVC.
+// Gestisce le richieste REST per l'entità Studente e delega la logica al Service.
+
 
 @RestController
 @RequestMapping("/api/studenti")
@@ -42,4 +51,29 @@ public class StudenteController {
         studenteService.eliminaStudente(id);
         return ResponseEntity.noContent().build();
     }
+
+
+    // Endpoint che genera il CSV
+    @GetMapping("/export/csv")
+    public void exportStudentiToCsv(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=studenti.csv");
+
+        try (PrintWriter writer = response.getWriter()) {
+            writer.println("ID, Nome, Cognome, Email, Data di Nascita");
+
+            List<StudenteDTO> studenti = studenteService.getAll();
+            for (StudenteDTO s : studenti) {
+                writer.printf("%d, %s, %s, %s, %s%n",
+                        s.getId(),
+                        s.getNome(),
+                        s.getCognome(),
+                        s.getEmail(),
+                        s.getDataNascita()
+                );
+            }
+        }
+    }
+
+
 }

@@ -3,6 +3,11 @@ package com.michele.caniglia.Esame.Java.dto.mapper;
 import com.michele.caniglia.Esame.Java.dto.StudenteDTO;
 import com.michele.caniglia.Esame.Java.model.Studente;
 
+
+// Questi metodi rappresentano un'applicazione del Factory Method Pattern.
+// Consentono la conversione tra DTO e entità mantenendo separazione tra i livelli.
+
+
 public class StudenteMapper {
 
     public static StudenteDTO toDTO(Studente studente) {
