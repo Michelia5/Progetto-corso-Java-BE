@@ -6,6 +6,7 @@ import com.michele.caniglia.Esame.Java.auth.model.ERole;
 import com.michele.caniglia.Esame.Java.auth.payload.request.LoginRequest;
 import com.michele.caniglia.Esame.Java.auth.payload.request.SignupRequest;
 import com.michele.caniglia.Esame.Java.auth.payload.response.JwtResponse;
+import com.michele.caniglia.Esame.Java.auth.payload.response.MessageResponse;
 import com.michele.caniglia.Esame.Java.auth.repository.AuthRuoloRepository;
 import com.michele.caniglia.Esame.Java.auth.repository.AuthUtenteRepository;
 import com.michele.caniglia.Esame.Java.auth.security.jwt.JwtUtils;
@@ -66,23 +67,28 @@ public class AuthController {
     }
 
     // Gestisco la registrazione
-    @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signupRequest) {
-
-        if (utenteRepository.existsByUsername(signupRequest.getUsername())) {
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+        if (utenteRepository.existsByUsername(signUpRequest.getUsername())) {
             return ResponseEntity
                     .badRequest()
-                    .body("Errore: username già in uso!");
+                    .body(new MessageResponse("Errore: Username già in uso!"));
+        }
+
+        if (utenteRepository.existsByEmail(signUpRequest.getEmail())) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(new MessageResponse("Errore: Email già in uso!"));
         }
 
         // Crea nuovo utente
         AuthUtente utente = AuthUtente.builder()
-                .username(signupRequest.getUsername())
-                .email(signupRequest.getEmail())
-                .password(encoder.encode(signupRequest.getPassword()))
+                .username(signUpRequest.getUsername())
+                .email(signUpRequest.getEmail())
+                .password(encoder.encode(signUpRequest.getPassword()))
                 .build();
 
-        Set<String> strRuoli = signupRequest.getRuoli();
+        Set<String> strRuoli = signUpRequest.getRuoli();
         Set<AuthRuolo> ruoli = new HashSet<>();
 
         if (strRuoli == null || strRuoli.isEmpty()) {

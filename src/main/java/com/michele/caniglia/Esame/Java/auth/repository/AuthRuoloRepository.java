@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface AuthRuoloRepository extends JpaRepository<AuthRuolo, Integer> {
     Optional<AuthRuolo> findByNome(ERole nome);
+
+    boolean existsByNome(ERole nome);
 }
 
 

@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.PrintWriter;
@@ -29,27 +30,31 @@ public class StudenteController {
     private final StudenteService studenteService;
     private final StudentePdfService studentePdfService;
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<StudenteDTO> creaStudente(@Valid @RequestBody StudenteDTO dto) {
         return ResponseEntity.ok(studenteService.creaStudente(dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<List<StudenteDTO>> getAll() {
         return ResponseEntity.ok(studenteService.getAll());
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<StudenteDTO> getById(@PathVariable Long id) {
         return ResponseEntity.ok(studenteService.getById(id));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<StudenteDTO> aggiorna(@PathVariable Long id, @Valid @RequestBody StudenteDTO dto) {
         return ResponseEntity.ok(studenteService.aggiornaStudente(id, dto));
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> elimina(@PathVariable Long id) {
         studenteService.eliminaStudente(id);
@@ -57,7 +62,8 @@ public class StudenteController {
     }
 
 
-    // Endpoint che genera il CSV
+    // Endpoint per generare il csv
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/export/csv")
     public void exportStudentiToCsv(HttpServletResponse response) throws IOException {
         response.setContentType("text/csv");
@@ -81,15 +87,14 @@ public class StudenteController {
 
 
     // Endpoint per generare il Pdf
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}/export/pdf")
     public void exportProfiloStudente(@PathVariable Long id, HttpServletResponse response) throws IOException {
         try {
-
             studentePdfService.exportProfiloStudente(id, response);
         } catch (Exception e) {
-            e.printStackTrace(); // stampa in console
+            e.printStackTrace();
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore generazione PDF");
         }
     }
-
 }
