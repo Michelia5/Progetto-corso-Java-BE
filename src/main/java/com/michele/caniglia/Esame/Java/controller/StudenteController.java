@@ -5,6 +5,8 @@ import com.michele.caniglia.Esame.Java.model.Studente;
 import com.michele.caniglia.Esame.Java.service.StudenteService;
 
 import java.io.IOException;
+
+import com.michele.caniglia.Esame.Java.service.pdf.StudentePdfService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,8 @@ import java.util.List;
 public class StudenteController {
 
     private final StudenteService studenteService;
+    private final StudentePdfService studentePdfService;
+
 
     @PostMapping
     public ResponseEntity<StudenteDTO> creaStudente(@Valid @RequestBody StudenteDTO dto) {
@@ -75,5 +79,17 @@ public class StudenteController {
         }
     }
 
+
+    // Endpoint per generare il Pdf
+    @GetMapping("/{id}/export/pdf")
+    public void exportProfiloStudente(@PathVariable Long id, HttpServletResponse response) throws IOException {
+        try {
+
+            studentePdfService.exportProfiloStudente(id, response);
+        } catch (Exception e) {
+            e.printStackTrace(); // stampa in console
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Errore generazione PDF");
+        }
+    }
 
 }
