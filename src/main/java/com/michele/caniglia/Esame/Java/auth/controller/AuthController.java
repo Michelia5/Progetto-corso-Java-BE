@@ -11,7 +11,13 @@ import com.michele.caniglia.Esame.Java.auth.repository.AuthRuoloRepository;
 import com.michele.caniglia.Esame.Java.auth.repository.AuthUtenteRepository;
 import com.michele.caniglia.Esame.Java.auth.security.jwt.JwtUtils;
 import com.michele.caniglia.Esame.Java.auth.security.services.UserDetailsImpl;
+import com.michele.caniglia.Esame.Java.model.Docente;
+import com.michele.caniglia.Esame.Java.model.Studente;
+import com.michele.caniglia.Esame.Java.repository.DocenteRepository;
+import com.michele.caniglia.Esame.Java.repository.StudenteRepository;
+import com.michele.caniglia.Esame.Java.service.AulaService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,12 +27,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/auth")
+@RequiredArgsConstructor
 public class AuthController {
+
+    private final StudenteRepository studenteRepository;
+    private final DocenteRepository docenteRepository;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -65,6 +76,7 @@ public class AuthController {
 
         return ResponseEntity.ok(new JwtResponse(jwt, "Bearer", userDetails.getUsername(), ruoli));
     }
+
 
     // Gestisco la registrazione
     @PostMapping("/signup")
@@ -106,9 +118,32 @@ public class AuthController {
         }
 
         utente.setRuoli(ruoli);
-        utenteRepository.save(utente);
+        AuthUtente utenteSalvato = utenteRepository.save(utente);
 
-        return ResponseEntity.ok("Utente registrato con successo!");
+        // Associazione automatica Studente/Docente
+        if (ruoli.stream().anyMatch(r -> r.getNome().equals(ERole.ROLE_STUDENTE))) {
+            Studente studente = Studente.builder()
+                    .nome(signUpRequest.getNome())
+                    .cognome(signUpRequest.getCognome())
+                    .email(signUpRequest.getEmail())
+                    .dataNascita(signUpRequest.getDataNascita())
+                    .authUtente(utenteSalvato)
+                    .build();
+            studenteRepository.save(studente);
+        }
+
+        if (ruoli.stream().anyMatch(r -> r.getNome().equals(ERole.ROLE_DOCENTE))) {
+            Docente docente = Docente.builder()
+                    .nome(signUpRequest.getNome())
+                    .cognome(signUpRequest.getCognome())
+                    .email(signUpRequest.getEmail())
+                    .authUtente(utenteSalvato)
+                    .build();
+            docenteRepository.save(docente);
+        }
+
+        return ResponseEntity.ok(new MessageResponse("Utente registrato con successo!"));
     }
+
 }
 
