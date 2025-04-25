@@ -1,5 +1,7 @@
 package com.michele.caniglia.Esame.Java.auth.model;
 
+import com.michele.caniglia.Esame.Java.model.Docente;
+import com.michele.caniglia.Esame.Java.model.Studente;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,8 +37,8 @@ public class AuthUtente {
     private Set<AuthRuolo> ruoli = new HashSet<>();
 
     @OneToOne(mappedBy = "authUtente")
-    private com.michele.caniglia.Esame.Java.model.Studente studente;
+    private Studente studente;
 
     @OneToOne(mappedBy = "authUtente")
-    private com.michele.caniglia.Esame.Java.model.Docente docente;
+    private Docente docente;
 }

@@ -1,7 +1,10 @@
 package com.michele.caniglia.Esame.Java.dto.mapper;
 
 import com.michele.caniglia.Esame.Java.dto.CorsoDTO;
-import com.michele.caniglia.Esame.Java.model.*;
+import com.michele.caniglia.Esame.Java.model.Aula;
+import com.michele.caniglia.Esame.Java.model.Corso;
+import com.michele.caniglia.Esame.Java.model.Docente;
+import com.michele.caniglia.Esame.Java.model.PercorsoFormativo;
 
 public class CorsoMapper {
 

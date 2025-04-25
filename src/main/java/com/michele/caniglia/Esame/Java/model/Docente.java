@@ -1,5 +1,6 @@
 package com.michele.caniglia.Esame.Java.model;
 
+import com.michele.caniglia.Esame.Java.auth.model.AuthUtente;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,5 +27,5 @@ public class Docente {
 
     @OneToOne
     @JoinColumn(name = "auth_utente_id")
-    private com.michele.caniglia.Esame.Java.auth.model.AuthUtente authUtente;
+    private AuthUtente authUtente;
 }

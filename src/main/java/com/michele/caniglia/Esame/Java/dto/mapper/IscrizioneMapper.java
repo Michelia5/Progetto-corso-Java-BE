@@ -1,5 +1,6 @@
-package com.michele.caniglia.Esame.Java.dto;
+package com.michele.caniglia.Esame.Java.dto.mapper;
 
+import com.michele.caniglia.Esame.Java.dto.IscrizioneDTO;
 import com.michele.caniglia.Esame.Java.model.Corso;
 import com.michele.caniglia.Esame.Java.model.Iscrizione;
 import com.michele.caniglia.Esame.Java.model.Studente;

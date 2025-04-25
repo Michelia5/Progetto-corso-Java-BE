@@ -1,6 +1,8 @@
 package com.michele.caniglia.Esame.Java.util;
 
 import com.michele.caniglia.Esame.Java.model.*;
+import com.michele.caniglia.Esame.Java.repository.*;
+import com.michele.caniglia.Esame.Java.model.*;
 import com.michele.caniglia.Esame.Java.model.MaterialeDidattico.Tipo;
 import com.michele.caniglia.Esame.Java.model.Iscrizione.StatoIscrizione;
 import com.michele.caniglia.Esame.Java.repository.*;
@@ -11,7 +13,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Component
 @Order(2)

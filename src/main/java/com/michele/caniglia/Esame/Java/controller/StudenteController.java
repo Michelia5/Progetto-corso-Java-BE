@@ -1,7 +1,6 @@
 package com.michele.caniglia.Esame.Java.controller;
 
 import com.michele.caniglia.Esame.Java.dto.StudenteDTO;
-import com.michele.caniglia.Esame.Java.model.Studente;
 import com.michele.caniglia.Esame.Java.service.StudenteService;
 
 import java.io.IOException;

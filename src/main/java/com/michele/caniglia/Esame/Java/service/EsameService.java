@@ -1,11 +1,14 @@
 package com.michele.caniglia.Esame.Java.service;
 
 import com.michele.caniglia.Esame.Java.dto.EsameDTO;
+import com.michele.caniglia.Esame.Java.exception.ResourceNotFoundException;
 import com.michele.caniglia.Esame.Java.model.Corso;
 import com.michele.caniglia.Esame.Java.model.Esame;
 import com.michele.caniglia.Esame.Java.repository.CorsoRepository;
 import com.michele.caniglia.Esame.Java.repository.EsameRepository;
+
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -15,14 +18,18 @@ import static com.michele.caniglia.Esame.Java.dto.mapper.EsameMapper.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EsameService {
 
     private final EsameRepository repository;
     private final CorsoRepository corsoRepository;
 
     public EsameDTO crea(EsameDTO dto) {
-        Corso corso = corsoRepository.findById(dto.getCorsoId()).orElse(null);
-        return toDTO(repository.save(fromDTO(dto, corso)));
+        Corso corso = corsoRepository.findById(dto.getCorsoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Corso non trovato con ID: " + dto.getCorsoId()));
+        Esame salvato = repository.save(fromDTO(dto, corso));
+        log.info("Creato nuovo esame: {}", salvato.getNome());
+        return toDTO(salvato);
     }
 
     public List<EsameDTO> getAll() {
@@ -30,22 +37,40 @@ public class EsameService {
         for (Esame e : repository.findAll()) {
             list.add(toDTO(e));
         }
+        log.info("Restituiti {} esami", list.size());
         return list;
     }
 
     public EsameDTO getById(Long id) {
-        return toDTO(repository.findById(id).orElse(null));
+        Esame esame = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Esame non trovato con ID: " + id));
+        log.info("Esame trovato con ID {}: {}", id, esame.getNome());
+        return toDTO(esame);
     }
 
     public EsameDTO aggiorna(Long id, EsameDTO dto) {
-        if (!repository.existsById(id)) return null;
-        Corso corso = corsoRepository.findById(dto.getCorsoId()).orElse(null);
+        if (!repository.existsById(id)) {
+            log.warn("Aggiornamento fallito: esame con ID {} non trovato", id);
+            throw new ResourceNotFoundException("Esame da aggiornare non trovato con ID: " + id);
+        }
+
+        Corso corso = corsoRepository.findById(dto.getCorsoId())
+                .orElseThrow(() -> new ResourceNotFoundException("Corso non trovato con ID: " + dto.getCorsoId()));
+
         Esame aggiornato = fromDTO(dto, corso);
         aggiornato.setId(id);
-        return toDTO(repository.save(aggiornato));
+        Esame salvato = repository.save(aggiornato);
+        log.info("Esame aggiornato con ID {}: {}", id, salvato.getNome());
+        return toDTO(salvato);
     }
 
     public void elimina(Long id) {
+        if (!repository.existsById(id)) {
+            log.warn("Tentativo di eliminazione fallito: esame con ID {} non trovato", id);
+            throw new ResourceNotFoundException("Esame da eliminare non trovato con ID: " + id);
+        }
+
         repository.deleteById(id);
+        log.info("Esame eliminato con ID {}", id);
     }
 }
