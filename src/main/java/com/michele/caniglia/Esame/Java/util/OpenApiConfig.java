@@ -12,6 +12,8 @@ public class OpenApiConfig {
 
     private static final String BEARER_KEY = "BearerAuth";
 
+
+    // Permette di potersi autenticare su Swagger inserendo il JWT
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -29,4 +31,3 @@ public class OpenApiConfig {
                                         .bearerFormat("JWT")));
     }
 }
-

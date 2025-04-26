@@ -17,7 +17,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 
-// Questo controller implementa il pattern Controller del modello MVC.
+// Questa classe implementa il Controller del modello MVC.
 // Gestisce le richieste REST per l'entità Studente e delega la logica al Service.
 
 

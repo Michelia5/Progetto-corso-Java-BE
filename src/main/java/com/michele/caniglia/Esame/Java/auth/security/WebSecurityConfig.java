@@ -56,10 +56,9 @@ public class WebSecurityConfig {
     }
 
     /*
-    - Disabilitare il CSRF
+    - Disabilita il CSRF
     - Imposta la gestione delle sessioni su stateless (usa solo il token JWT)
-    - Rende pubblici gli endpoint sotto /api/auth/**
-    - Protegge il resto
+    - Protegge gli endpoint
     - Collego il filtro JWT e l’autenticazione personalizzata
     */
     @Bean
@@ -68,7 +67,6 @@ public class WebSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                         .anyRequest().authenticated()
                 )
