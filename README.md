@@ -14,7 +14,7 @@ Realizzare un'applicazione backend REST in Java con Spring Boot per la gestione 
 - Maven
 - Swagger/OpenAPI
 - Apache POI (per l’export in Excel)
-- iText (per la generazione PDF)
+- OpenPdf (per la generazione del PDF)
 
 ## 🏛️ Architettura
 L'applicazione segue il pattern **MVC**:
@@ -67,8 +67,8 @@ Tutti i livelli sono ben separati. Sono presenti DTO, Mapper, validatori e gesti
 
 ## ▶️ Avvio del progetto
 1. Clonare il repository
-2. Configurare PostgreSQL (o qualsiasi altro DB) (DB: `esame_java`)
-3. Configurare application.properties come descritto di seguito
+2. Configurare PostgreSQL (o qualsiasi altro DB) (Nome: `esame_java`)
+3. Configurare application.properties come descritto di seguito in [Configurazione dell'applicazione](#-configurazione-dellapplicazione)
 4. Avviare l’app Spring Boot (`main`)
 5. Accedere a Swagger: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 6. Usare Postman o Swagger per testare le API

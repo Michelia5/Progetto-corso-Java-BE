@@ -1,6 +1,7 @@
 package com.michele.caniglia.Esame.Java.service;
 
 import com.michele.caniglia.Esame.Java.dto.StudenteDTO;
+import com.michele.caniglia.Esame.Java.exception.ResourceNotFoundException;
 import com.michele.caniglia.Esame.Java.model.Studente;
 import com.michele.caniglia.Esame.Java.repository.StudenteRepository;
 
@@ -25,6 +26,14 @@ class StudenteServiceTest {
         studenteRepository = Mockito.mock(StudenteRepository.class);
         studenteService = new StudenteService(studenteRepository);
     }
+
+
+    /*
+    Ho effettuato delle modifiche al file poiché in caso di id inesistente prima
+    andavo ad aspettarmi come risultato null, ma avendo aggiunto
+    poi l'eccezione ResourceNotFound ovviamente i test fallivano
+    poiché ricevevo in "risposta" quest'ultima e non più null
+    */
 
     @Test
     void creaStudente_deveRestituireDTOSalvato() {
@@ -92,12 +101,11 @@ class StudenteServiceTest {
     }
 
     @Test
-    void getById_conIdInesistente_deveRestituireNull() {
+    void getById_conIdInesistente_deveLanciareEccezione() {
         when(studenteRepository.findById(99L)).thenReturn(Optional.empty());
 
-        StudenteDTO result = studenteService.getById(99L);
+        assertThrows(ResourceNotFoundException.class, () -> studenteService.getById(99L));
 
-        assertNull(result);
         verify(studenteRepository, times(1)).findById(99L);
     }
 
@@ -127,24 +135,25 @@ class StudenteServiceTest {
     }
 
     @Test
-    void aggiornaStudente_conIdNonEsistente_deveRestituireNull() {
+    void aggiornaStudente_conIdNonEsistente_deveLanciareEccezione() {
         StudenteDTO dto = new StudenteDTO();
         when(studenteRepository.existsById(100L)).thenReturn(false);
 
-        StudenteDTO result = studenteService.aggiornaStudente(100L, dto);
+        assertThrows(ResourceNotFoundException.class, () -> studenteService.aggiornaStudente(100L, dto));
 
-        assertNull(result);
         verify(studenteRepository).existsById(100L);
         verify(studenteRepository, never()).save(any());
     }
 
     @Test
-    void eliminaStudente_deveChiamareDeleteById() {
+    void eliminaStudente_conIdInesistente_deveLanciareEccezione() {
         Long id = 1L;
+        when(studenteRepository.existsById(id)).thenReturn(false);
 
-        studenteService.eliminaStudente(id);
+        assertThrows(ResourceNotFoundException.class, () -> studenteService.eliminaStudente(id));
 
-        verify(studenteRepository, times(1)).deleteById(id);
+        verify(studenteRepository, times(1)).existsById(id);
+        verify(studenteRepository, never()).deleteById(id);
     }
 
 }
