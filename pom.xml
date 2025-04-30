@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.michele.caniglia</groupId>
-	<artifactId>Esame-Fine-Corso-Java</artifactId>
-	<version>0.0.1</version>
+	<artifactId>Tech-Academy</artifactId>
+	<version>1.0.0</version>
 	<packaging>jar</packaging>
-	<name>Esame-Fine-Corso-Java</name>
+	<name>Tech-Academy-BE</name>
 	<description>Esame Fine Corso Java</description>
 
 	<properties>
